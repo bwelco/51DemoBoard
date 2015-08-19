@@ -1,0 +1,9 @@
+"main.obj",
+"system_init.obj",
+"tempture.obj",
+"steering.obj",
+"handle_message.obj",
+"interrupt.obj",
+"light.obj" 
+TO "temperature" 
+RAMSIZE(256) 

@@ -1,0 +1,570 @@
+C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    08/19/2015 17:48:05 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE HANDLE_MESSAGE
+OBJECT MODULE PLACED IN handle_message.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE handle_message.c LARGE BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <myhead.h>
+   2          char send_message[50];
+   3          int tempdegree;
+   4          char *p;
+   5          void handle_message()
+   6          {
+   7   1          if(strncmp(strbuf, "test", 4) == 0)
+   8   1              {
+   9   2                      sprintf(send_message, "return test\n");
+  10   2                      sendstr(send_message);
+  11   2                      temp_lock = 1;
+  12   2          }
+  13   1              
+  14   1              if(strncmp(strbuf, "GETTEMPERATURE", strlen("GETTEMPERATURE")) == 0)
+  15   1              {
+  16   2                      int i = 0;
+  17   2                      gettemperature();
+  18   2                      sprintf(send_message, "T = %d.%d\n", TH, TL);
+  19   2                      sendstr(send_message);
+  20   2                      
+  21   2                      if(out1 == 1)
+  22   2                              i = 1;
+  23   2                      else 
+  24   2                              i = 0;
+  25   2                      sprintf(send_message, "out1 = %d\n", i);
+  26   2                      sendstr(send_message);
+  27   2              }
+  28   1              if(strncmp(strbuf, "GETHUNIDITY", strlen("GETTEMPERATURE")) == 0)
+  29   1              {
+  30   2                      int i = 0;
+  31   2                      gettemperature();
+  32   2                      sprintf(send_message, "R = %d.%d\n", RH, RL);
+  33   2                      sendstr(send_message);
+  34   2                      
+  35   2                      if(out2 == 1)
+  36   2                              i = 1;
+  37   2                      else 
+  38   2                              i = 0;
+  39   2                      sprintf(send_message, "out2 = %d\n", i);
+  40   2                      sendstr(send_message);
+  41   2              }
+  42   1              if(strncmp(strbuf, "GETLIGHT", strlen("GETLIGHT")) == 0)
+  43   1              {
+  44   2                      int i = 0;
+  45   2                      getled();
+  46   2                      sendstr(ledstr);
+  47   2                      if(out3 == 1)
+  48   2                              i = 1;
+  49   2                      else 
+  50   2                              i = 0;
+  51   2                      sprintf(send_message, "out3 = %d\n",i);
+  52   2                      sendstr(send_message);
+  53   2              }
+  54   1              if(strncmp(strbuf, "SETSTEER", strlen("SETSTEER")) == 0)
+  55   1              {
+C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    08/19/2015 17:48:05 PAGE 2   
+
+  56   2                      p = strbuf;
+  57   2                      tempdegree = 0;
+  58   2                      p = p + 8;
+  59   2                      
+  60   2                      while(*p != '\0')
+  61   2                      {
+  62   3                              tempdegree = tempdegree * 10 + (*p - '0');
+  63   3                              p++;
+  64   3              }
+  65   2                      //while(lock_2 == 1);
+  66   2                      //lock_3 = 1;
+  67   2                      
+  68   2                      stop_interrupt();
+  69   2                      pwm_value = turn(tempdegree);
+  70   2                      InitSteering();
+  71   2                      interrupt1_lock = 1;
+  72   2                      interrupt3_lock = 1;
+  73   2                      
+  74   2                      delay_ms_steering(1000);
+  75   2                      delay_ms_steering(1000);
+  76   2                      delay_ms_steering(500);
+  77   2                      StopSteering();
+  78   2                      start_interrupt();
+  79   2                      sendstr("OK\n");
+  80   2                      interrupt1_lock = 0;
+  81   2                      interrupt3_lock = 0;
+  82   2                      
+  83   2                      //lock_3 = 0;
+  84   2          }
+  85   1              /*
+  86   1              if(strncmp(strbuf, "SETTEMPMAX", strlen("SETTEMPMAX")) == 0)
+  87   1              {
+  88   1                  p = strbuf;
+  89   1                      tempdegree = 0;
+  90   1                      p = p + 10;
+  91   1                      
+  92   1                      while(*p != '\0')
+  93   1                      {
+  94   1                              tempdegree = tempdegree * 10 + (*p - '0');
+  95   1                              p++;
+  96   1              }
+  97   1                      temp_max = tempdegree;
+  98   1                      
+  99   1          }
+ 100   1              
+ 101   1              if(strncmp(strbuf, "SETTEMPMIN", strlen("SETTEMPMIN")) == 0)
+ 102   1              {
+ 103   1                      p = strbuf;
+ 104   1                      tempdegree = 0;
+ 105   1                      p = p + 10;
+ 106   1                      
+ 107   1                      while(*p != '\0')
+ 108   1                      {
+ 109   1                              tempdegree = tempdegree * 10 + (*p - '0');
+ 110   1                              p++;
+ 111   1              }
+ 112   1                      temp_min = tempdegree;
+ 113   1                  
+ 114   1          }
+ 115   1              
+ 116   1              if(strncmp(strbuf, "SETHUMIMAX", strlen("SETHUMIMAX")) == 0)
+ 117   1              {
+C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    08/19/2015 17:48:05 PAGE 3   
+
+ 118   1                      p = strbuf;
+ 119   1                      tempdegree = 0;
+ 120   1                      p = p + 10;
+ 121   1                      
+ 122   1                      while(*p != '\0')
+ 123   1                      {
+ 124   1                              tempdegree = tempdegree * 10 + (*p - '0');
+ 125   1                              p++;
+ 126   1              }
+ 127   1                      humi_max = tempdegree;
+ 128   1                  
+ 129   1          }
+ 130   1              
+ 131   1              if(strncmp(strbuf, "SETHUMIMIN", strlen("SETHUMIMIN")) == 0)
+ 132   1              {
+ 133   1                  p = strbuf;
+ 134   1                      tempdegree = 0;
+ 135   1                      p = p + 10;
+ 136   1                      
+ 137   1                      while(*p != '\0')
+ 138   1                      {
+ 139   1                              tempdegree = tempdegree * 10 + (*p - '0');
+ 140   1                              p++;
+ 141   1              }
+ 142   1                      humi_min = tempdegree;
+ 143   1          }
+ 144   1              
+ 145   1              if(strncmp(strbuf, "SETLIGHTMAX", strlen("SETLIGHTMAX")) == 0)
+ 146   1              {
+ 147   1                  p = strbuf;
+ 148   1                      tempdegree = 0;
+ 149   1                      p = p + 11;
+ 150   1                      
+ 151   1                      while(*p != '\0')
+ 152   1                      {
+ 153   1                              tempdegree = tempdegree * 10 + (*p - '0');
+ 154   1                              p++;
+ 155   1              }
+ 156   1                      light_max = tempdegree;
+ 157   1          }
+ 158   1              
+ 159   1              if(strncmp(strbuf, "SETLIGHTMIN", strlen("SETLIGHTMIN")) == 0)
+ 160   1              {
+ 161   1                    p = strbuf;
+ 162   1                      tempdegree = 0;
+ 163   1                      p = p + 11;
+ 164   1                      
+ 165   1                      while(*p != '\0')
+ 166   1                      {
+ 167   1                              tempdegree = tempdegree * 10 + (*p - '0');
+ 168   1                              p++;
+ 169   1              }
+ 170   1                      light_min = tempdegree;
+ 171   1          }
+ 172   1              */
+ 173   1              if(strncmp(strbuf, "OUT1ON", strlen("OUT1ON")) == 0)
+ 174   1              {
+ 175   2                      out1 = 0;
+ 176   2          }
+ 177   1              
+ 178   1              if(strncmp(strbuf, "OUT2ON", strlen("OUT2ON")) == 0)
+ 179   1              {
+C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    08/19/2015 17:48:05 PAGE 4   
+
+ 180   2                      out2 = 0;
+ 181   2          }
+ 182   1              
+ 183   1              if(strncmp(strbuf, "OUT3ON", strlen("OUT3ON")) == 0)
+ 184   1              {
+ 185   2                      out3 = 0;               
+ 186   2          }
+ 187   1              
+ 188   1              if(strncmp(strbuf, "OUT1OFF", strlen("OUT1OFF")) == 0)
+ 189   1              {
+ 190   2                      out1 = 1;
+ 191   2          }
+ 192   1              
+ 193   1              if(strncmp(strbuf, "OUT2OFF", strlen("OUT2OFF")) == 0)
+ 194   1              {
+ 195   2                      out2 = 1;
+ 196   2          }
+ 197   1              
+ 198   1              if(strncmp(strbuf, "OUT3OFF", strlen("OUT3OFF")) == 0)
+ 199   1              {
+ 200   2                      out3 = 1;               
+ 201   2          }
+ 202   1              
+ 203   1              if(strncmp(strbuf, "SETRGB", strlen("SETRGB")) == 0)
+ 204   1              {
+ 205   2                      red = strbuf[6] - '0';
+ 206   2                      green = strbuf[7]- '0';
+ 207   2                      blue = strbuf[8] - '0';         
+ 208   2          }
+ 209   1              
+ 210   1              if(strncmp(strbuf, "BPMON", strlen("BPMON")) == 0)
+ 211   1              {
+ 212   2                      bpm = 1;        
+ 213   2          }
+ 214   1              
+ 215   1              if(strncmp(strbuf, "BPMOFF", strlen("BPMOFF")) == 0)
+ 216   1              {
+ 217   2                      bpm = 0;                
+ 218   2          }
+ 219   1              
+ 220   1              if(strncmp(strbuf, "SETMAX", strlen("SETMAX")) == 0)   //setmaxtemp1223
+ 221   1              {
+ 222   2                      p = strbuf;
+ 223   2                      p = p + 6;
+ 224   2                      
+ 225   2                      if(*p == 'T')
+ 226   2                      {
+ 227   3                              temp_max = 0;
+ 228   3                              p = p + 4;
+ 229   3                              if(*p == '\0')
+ 230   3                              {
+ 231   4                                      temp_max_flag = 0;
+ 232   4                                      temp_max = 100;
+ 233   4                                      
+ 234   4                                      return;
+ 235   4                              }
+ 236   3                              while(*p != '\0')
+ 237   3                              {
+ 238   4                                      temp_max = temp_max * 10 + (*p - '0');
+ 239   4                                      p++;
+ 240   4                              }
+ 241   3                              temp_max_flag = 1;
+C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    08/19/2015 17:48:05 PAGE 5   
+
+ 242   3                              
+ 243   3                      }
+ 244   2                      
+ 245   2                      if(*p == 'L')
+ 246   2                      {
+ 247   3                              light_max = 0;
+ 248   3                              p = p + 5;
+ 249   3                              if(*p == '\0')
+ 250   3                              {
+ 251   4                                      light_max_flag = 0;
+ 252   4                                      light_max = 99999;
+ 253   4                                      return;
+ 254   4                              }
+ 255   3                              while(*p != '\0')
+ 256   3                              {
+ 257   4                                      light_max = light_max * 10 + (*p - '0');
+ 258   4                                      p++;
+ 259   4                              }
+ 260   3                              light_max_flag = 1;
+ 261   3                      }
+ 262   2                      
+ 263   2                      if(*p == 'H')
+ 264   2                      {
+ 265   3                              humi_max = 0;
+ 266   3                              p = p + 4;
+ 267   3                              if(*p == '\0')
+ 268   3                              {
+ 269   4                                      humi_max_flag = 0;
+ 270   4                                      humi_max = 100;
+ 271   4                                      return;
+ 272   4                              }
+ 273   3                              while(*p != '\0')
+ 274   3                              {
+ 275   4                                      humi_max = humi_max * 10 + (*p - '0');
+ 276   4                                      p++;
+ 277   4                              }
+ 278   3                              humi_max_flag = 1;
+ 279   3                      }
+ 280   2          }
+ 281   1              
+ 282   1              if(strncmp(strbuf, "SETMIN", strlen("SETMIN")) == 0)   //setmaxtemp1223
+ 283   1              {
+ 284   2                      p = strbuf;
+ 285   2                      p = p + 6;
+ 286   2                      
+ 287   2                      if(*p == 'T')
+ 288   2                      {
+ 289   3                              temp_min = 0;
+ 290   3                              p = p + 4;
+ 291   3                              if(*p == '\0')
+ 292   3                              {
+ 293   4                                      temp_min_flag = 0;
+ 294   4                                      temp_min = -40;
+ 295   4                                      return;
+ 296   4                              }
+ 297   3                              while(*p != '\0')
+ 298   3                              {
+ 299   4                                      temp_min = temp_min * 10 + (*p - '0');
+ 300   4                                      p++;
+ 301   4                              }
+ 302   3                              temp_min_flag = 1;
+ 303   3                              sprintf(send_message, "Th = %d, tempmin = %d\n", (int)TH, temp_min);
+C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    08/19/2015 17:48:05 PAGE 6   
+
+ 304   3                              sendstr(send_message);
+ 305   3                      }
+ 306   2                      
+ 307   2                      if(*p == 'L')
+ 308   2                      {
+ 309   3                              light_min = 0;
+ 310   3                              p = p + 5;
+ 311   3                              if(*p == '\0')
+ 312   3                              {
+ 313   4                                      light_min_flag = 0;
+ 314   4                                      light_min = -1;
+ 315   4                                      return;
+ 316   4                              }
+ 317   3                              while(*p != '\0')
+ 318   3                              {
+ 319   4                                      light_min = light_min * 10 + (*p - '0');
+ 320   4                                      p++;
+ 321   4                              }
+ 322   3                              light_min_flag = 1;
+ 323   3                      }
+ 324   2                      
+ 325   2                      if(*p == 'H')
+ 326   2                      {
+ 327   3                              humi_min = 0;
+ 328   3                              p = p + 4;
+ 329   3                              if(*p == '\0')
+ 330   3                              {
+ 331   4                                      humi_min_flag = 0;
+ 332   4                                      humi_min = 0;
+ 333   4                                      return;
+ 334   4                              }
+ 335   3                              while(*p != '\0')
+ 336   3                              {
+ 337   4                                      humi_min = humi_min * 10 + (*p - '0');
+ 338   4                                      p++;
+ 339   4                              }
+ 340   3                              humi_min_flag = 1;
+ 341   3                      }
+ 342   2          }
+ 343   1              
+ 344   1      
+ 345   1              
+ 346   1              if(strncmp(strbuf, "CARDSET", strlen("CARDSET")) == 0)
+ 347   1              {
+ 348   2                      char *q = setcard_buf;
+ 349   2                      p = strbuf;
+ 350   2                      p = p + 7;
+ 351   2                      while(*p != '\0')
+ 352   2                      {
+ 353   3                              *q = *p;
+ 354   3                              q++;
+ 355   3                              p++;
+ 356   3                      }
+ 357   2                      *q = '\0';
+ 358   2                      card_flag = 1;
+ 359   2          }
+ 360   1              
+ 361   1              if(strncmp(strbuf, "STEERSET", strlen("STEERSET")) == 0)
+ 362   1              {
+ 363   2                      p = strbuf;
+ 364   2                      p = p + 8;
+ 365   2                      steer_degree = 0;
+C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    08/19/2015 17:48:05 PAGE 7   
+
+ 366   2                      while(*p != '\0')
+ 367   2                      {
+ 368   3                              steer_degree = steer_degree * 10 + (*p - '0');
+ 369   3                              p++;
+ 370   3                      }
+ 371   2                      steer_flag = 1;
+ 372   2          }
+ 373   1              
+ 374   1              if(strncmp(strbuf, "GETOUT1", strlen("GETOUT1")) == 0)
+ 375   1              {
+ 376   2                      int i = 0;
+ 377   2                      if(out1 == 1)
+ 378   2                              i = 1;
+ 379   2                      else 
+ 380   2                              i = 0;
+ 381   2                      sprintf(send_message, "out1 = %d\n",i);
+ 382   2                      sendstr(send_message);
+ 383   2          }
+ 384   1              
+ 385   1              if(strncmp(strbuf, "GETOUT2", strlen("GETOUT2")) == 0)
+ 386   1              {
+ 387   2                      int i = 0;
+ 388   2                      if(out2 == 1)
+ 389   2                              i = 1;
+ 390   2                      else 
+ 391   2                              i = 0;
+ 392   2                      sprintf(send_message, "out2 = %d\n",i);
+ 393   2                      sendstr(send_message);
+ 394   2          }
+ 395   1              
+ 396   1              if(strncmp(strbuf, "GETOUT3", strlen("GETOUT3")) == 0)
+ 397   1              {
+ 398   2                      int i = 0;
+ 399   2                      if(out3 == 1)
+ 400   2                              i = 1;
+ 401   2                      else 
+ 402   2                              i = 0;
+ 403   2                      sprintf(send_message, "out3 = %d\n",i);
+ 404   2                      sendstr(send_message);
+ 405   2          }
+ 406   1              
+ 407   1              if(strncmp(strbuf, "SOUNDFLAG", strlen("SOUNDFLAG")) == 0)
+ 408   1              {
+ 409   2                      p = strbuf + 9;
+ 410   2                      if(*p == '1')
+ 411   2                              sound_flag = 1;
+ 412   2                      if(*p == '0')
+ 413   2                              sound_flag = 0;
+ 414   2          }
+ 415   1              
+ 416   1              if(strncmp(strbuf, "LIGHTFLAG", strlen("LIGHTFLAG")) == 0)
+ 417   1              {
+ 418   2                      p = strbuf + 9;
+ 419   2                      if(*p == '1')
+ 420   2                              redlight_flag = 1;
+ 421   2                      if(*p == '0')
+ 422   2                              redlight_flag = 0;
+ 423   2          }
+ 424   1              
+ 425   1              if(strncmp(strbuf, "GETREDLIGHT", strlen("GETREDLIGHT")) == 0)
+ 426   1              {
+ 427   2                      int i = 0;
+C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    08/19/2015 17:48:05 PAGE 8   
+
+ 428   2                      if(redlight_flag == 1)
+ 429   2                              i = 1;
+ 430   2                      else 
+ 431   2                              i = 0;
+ 432   2                      sprintf(send_message, "redlight = %d\n",i);
+ 433   2                      sendstr(send_message);
+ 434   2          }
+ 435   1              
+ 436   1              if(strncmp(strbuf, "GETSOUNDFLAG", strlen("GETSOUNDFLAG")) == 0)
+ 437   1              {
+ 438   2                      int i = 0;
+ 439   2                      if(sound_flag == 1)
+ 440   2                              i = 1;
+ 441   2                      else 
+ 442   2                              i = 0;
+ 443   2                      sprintf(send_message, "sound = %d\n",i);
+ 444   2                      sendstr(send_message);
+ 445   2          }
+ 446   1              
+ 447   1              if(strncmp(strbuf, "GETALLFLAGINIT", strlen("GETALLFLAGINIT")) == 0)
+ 448   1              {
+ 449   2                  int i = 0;
+ 450   2                      int rcc,gcc,bcc;
+ 451   2                      int bpmcc;
+ 452   2                      
+ 453   2                      CR = 0;  
+ 454   2                      gettemperature();
+ 455   2                      sprintf(send_message, "T = %d.%d\n", TH, TL);
+ 456   2                      sendstr(send_message);
+ 457   2                      Delay18ms();
+ 458   2                      sprintf(send_message, "R = %d.%d\n", RH, RL);
+ 459   2                      sendstr(send_message);
+ 460   2                      Delay18ms();
+ 461   2                      getled();
+ 462   2                      sendstr(ledstr);
+ 463   2                      Delay18ms();
+ 464   2                      /***********out1***********/
+ 465   2                      if(out1 == 1)
+ 466   2                              i = 1;
+ 467   2                      else 
+ 468   2                              i = 0;
+ 469   2                      sprintf(send_message, "out1 = %d\n", i);
+ 470   2                      sendstr(send_message);
+ 471   2                      Delay18ms();
+ 472   2                      /***********out2***********/
+ 473   2                      if(out2 == 1)
+ 474   2                              i = 1;
+ 475   2                      else 
+ 476   2                              i = 0;
+ 477   2                      sprintf(send_message, "out2 = %d\n", i);
+ 478   2                      sendstr(send_message);
+ 479   2                      Delay18ms();
+ 480   2                      /***********out3***********/
+ 481   2                      if(out3 == 1)
+ 482   2                              i = 1;
+ 483   2                      else 
+ 484   2                              i = 0;
+ 485   2                      sprintf(send_message, "out3 = %d\n",i);
+ 486   2                      sendstr(send_message);
+ 487   2                      Delay18ms();
+ 488   2                      /*********led******************/
+ 489   2                      
+C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    08/19/2015 17:48:05 PAGE 9   
+
+ 490   2                      if(red == 0) rcc = 0; else rcc = 1;
+ 491   2                      if(green == 0) gcc = 0; else gcc = 1;
+ 492   2                      if(blue == 0) bcc = 0; else bcc = 1;
+ 493   2                      sprintf(send_message, "RGB = %d%d%d\n", rcc, gcc ,bcc);
+ 494   2                      sendstr(send_message);
+ 495   2                      Delay18ms();
+ 496   2                      /**************bpm****************/
+ 497   2                      if(bpm == 1)
+ 498   2                              bpmcc = 1;
+ 499   2                      else 
+ 500   2                              bpmcc = 0;
+ 501   2                      sprintf(send_message, "bpm = %d\n", bpmcc);
+ 502   2                      sendstr(send_message);
+ 503   2                      Delay18ms();
+ 504   2                      /**********************soundflag*************/
+ 505   2                      if(sound_flag == 1)
+ 506   2                              i = 1;
+ 507   2                      else 
+ 508   2                              i = 0;
+ 509   2                      sprintf(send_message, "sound = %d\n",i);
+ 510   2                      sendstr(send_message);
+ 511   2                      /*******************redlight**************/
+ 512   2                      if(redlight_flag == 1)
+ 513   2                              i = 1;
+ 514   2                      else 
+ 515   2                              i = 0;
+ 516   2                      sprintf(send_message, "redlight = %d\n",i);
+ 517   2                      sendstr(send_message);
+ 518   2                      Delay18ms();
+ 519   2                      sprintf(send_message, "REFRESHOK\n");
+ 520   2                      sendstr(send_message);
+ 521   2      
+ 522   2          }
+ 523   1              if(strncmp(strbuf, "EXIT", strlen("EXIT")) == 0)
+ 524   1              {
+ 525   2                  sendstr("EXITOK\n");
+ 526   2                      //PCA_init();
+ 527   2                      bpm = 1;
+ 528   2                      Delay500ms();
+ 529   2                      bpm = 0;
+ 530   2          }
+ 531   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   4208    ----
+   CONSTANT SIZE    =    400    ----
+   XDATA SIZE       =     55      10
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
