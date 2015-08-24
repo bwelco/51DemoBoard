@@ -9,7 +9,7 @@ void system_init(void)
 	TMOD=0x20;			//设置定时器一为工作方式2
 	TH1=0xfd;			//设置波特率为9600
 	TL1=0xfd;
-	ledaa = 0;
+
 	TR1=1;
 	REN=1;
 	SM0=0;
@@ -33,6 +33,10 @@ void system_init(void)
 	IPH2 = 0X00;
 	//PSPI = 0;
 	
+	init_1602_morefree();
+	write_com_1602_morefree(0x80);
+	welcome();
+	PCA_init();
 	//Delay100us();      
 }
 
@@ -71,7 +75,10 @@ void start_interrupt()
 	TR0 = 1;
 	redlight = 1;
 	
-	//PCA_init();
+	
+	
+	init_1602_morefree();
+	write_com_1602_morefree(0x80);
 }
 
 void InitSteering(void)

@@ -2,10 +2,12 @@
 char send_message[50];
 int tempdegree;
 char *p;
+int android_flag = 0;
 void handle_message()
 {
     if(strncmp(strbuf, "test", 4) == 0)
 	{
+		CR = 0;  
 		sprintf(send_message, "return test\n");
 		sendstr(send_message);
 		temp_lock = 1;
@@ -79,6 +81,7 @@ void handle_message()
 		sendstr("OK\n");
 		interrupt1_lock = 0;
 		interrupt3_lock = 0;
+		android_control_lcd1602();
 		
 		//lock_3 = 0;
     }
@@ -320,6 +323,8 @@ void handle_message()
 				p++;
 			}
 			light_min_flag = 1;
+			sprintf(send_message, "T = %d\n", light_compare);
+		    sendstr(send_message);
 		}
 		
 		if(*p == 'H')
@@ -449,7 +454,8 @@ void handle_message()
 	    int i = 0;
 		int rcc,gcc,bcc;
 		int bpmcc;
-		
+		android_flag = 1;
+        android_control_lcd1602();
 		CR = 0;  
 		gettemperature();
 		sprintf(send_message, "T = %d.%d\n", TH, TL);
@@ -523,9 +529,11 @@ void handle_message()
 	if(strncmp(strbuf, "EXIT", strlen("EXIT")) == 0)
 	{
 	    sendstr("EXITOK\n");
-		//PCA_init();
+		PCA_init();
 		bpm = 1;
 		Delay500ms();
 		bpm = 0;
+		android_flag = 0;
+		normal_lcd1602_show();
     }
 }

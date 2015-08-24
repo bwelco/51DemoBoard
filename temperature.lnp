@@ -4,6 +4,7 @@
 "steering.obj",
 "handle_message.obj",
 "interrupt.obj",
-"light.obj" 
+"light.obj",
+"lcd1602.obj" 
 TO "temperature" 
 RAMSIZE(256) 

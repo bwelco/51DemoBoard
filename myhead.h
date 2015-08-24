@@ -56,9 +56,9 @@ extern int card_flag;
 extern char setcard_buf[50];
 extern int steer_degree;
 
-sbit red =  P2^3;
-sbit green = P2^5;
-sbit blue = P2^4;
+
+extern char tab1[30];
+extern char tab2[30];
 
 extern unsigned short T_PCA0;     
 extern unsigned short T_PCA1;
@@ -68,13 +68,11 @@ extern void PCA_init();
 extern void system_init(void);
 extern int lock_2;
 extern int lock_3;
-sbit bpm = P2^2;
-sbit ledaa = P1^0;
-sbit sound_key = P3^4;
+
 extern void sendstr(char *str);
 extern char send_message[50];
 /*******************temperature************/
-sbit  dht11  = P2^1 ;
+
 #define uchar unsigned char
 #define uint unsigned int
 extern U8  U8FLAG,k;
@@ -100,7 +98,7 @@ extern int RH, RL;
 extern void sound_delay(unsigned int z);
 
 /************************steering****************/
-sbit pwm=P1^5;
+
 extern unsigned int pwm_value;
 extern void delay_ms_steering(unsigned int x);
 extern unsigned int turn(int degree);
@@ -109,20 +107,35 @@ extern void StopSteering(void);
 
 extern int interrupt1_lock;
 extern int interrupt3_lock;
+extern char ledstr2[50];
 
 /**************** light ***********************/
 #define   uchar unsigned char
 #define   uint unsigned int	
 #define   DataPort P0	 //LCD1602数据端口
-sbit	  SCL=P2^6;      //IIC时钟引脚定义
-sbit  	  SDA=P2^7;      //IIC数据引脚定义
-sbit      LCM_RS=P2^0;   //LCD1602命令端口		
-sbit      LCM_RW=P2^1;   //LCD1602命令端口		
-sbit      LCM_EN=P2^2;   //LCD1602命令端口 
-sbit      redlight = P3^5;
-sbit      out1 = P1^6;
+
+sbit	  SCL = P2^5;      //IIC时钟引脚定义
+sbit  	  SDA = P2^4;      //IIC数据引脚定义
+sbit      redlight = P3^2;
+
+sbit      out1 = P1^4;
 sbit      out2 = P1^7;
-sbit      out3 = P2^0;
+sbit      out3 = P1^6;
+
+sbit      dht11  = P2^7 ;
+sbit      pwm = P1^5;
+sbit      bpm = P2^2;
+sbit      sound_key = P3^4;
+
+sbit      red =  P2^1;
+sbit      green = P2^0;
+sbit      blue = P2^3;
+
+sbit      lcden=P2^6;
+sbit      lcdrw=P1^1;
+sbit      lcdrs=P1^0;
+
+
 
 #define	  SlaveAddress   0x46 //定义器件在IIC总线中的从地址,根据ALT  ADDRESS地址引脚不同修改
                               //ALT  ADDRESS引脚接地时地址为0xA6，接电源时地址为0x3A
@@ -132,7 +145,7 @@ typedef   unsigned short WORD;
 extern BYTE    BUF[8];                         //接收数据缓存区      	
 extern uchar   ge,shi,bai,qian,wan;            //显示变量
 extern int     dis_data;                       //变量
-
+extern int light_compare;
 extern void delay_nms(unsigned int k);
 
 extern void Init_BH1750(void);
@@ -153,4 +166,12 @@ extern void BH1750_SendByte(BYTE dat);         //IIC单个字节写
 extern BYTE BH1750_RecvByte();                 //IIC单个字节读
 extern void getled();
 extern char ledstr[50];
-
+//---------------lcd1602-----------------------
+extern void lcd_delay(int z);
+extern void write_com_1602_morefree (unsigned char com);
+extern void write_date_1602_morefree (unsigned char date);
+extern void init_1602_morefree();
+extern void android_control_lcd1602();
+extern void normal_lcd1602_show();
+extern void welcome();
+extern int android_flag;

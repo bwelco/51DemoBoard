@@ -10,6 +10,9 @@ int temp_lock = 0;
 int card_id_posi = 0;
 char cardid[50] = {0};
 
+char tab1[30];
+char tab2[30];
+
 int temp_max = 100;
 int temp_min = -40;
 int light_max = 99999;
@@ -36,6 +39,7 @@ int steer_degree = 0;
 
 int lock_2 = 0;
 int lock_3 = 0;
+int card_flag_c = 0;
 int main()
 {	
 	bpm = 0;
@@ -71,7 +75,7 @@ int main()
 			if(temp_min_flag == 1 && temp_min > (int)TH)
 			{
 				out1 = 0;
-				sprintf(send_message, "out1 = 0\n");
+				sprintf(send_message, "out1 = 0\n");    //温度 < 下线值  输出1开
 				sendstr(send_message);
 			}
 			
@@ -79,17 +83,53 @@ int main()
 			if(temp_max_flag == 1 && (int)TH > temp_max)
 			{
 				out1 = 1;
-				sprintf(send_message, "out1 = 1\n");
+				sprintf(send_message, "out1 = 1\n");    //温度 > 上限值  输出1关
 				sendstr(send_message);
 			}
 			
+			if(humi_max_flag == 1 && (int)RH > humi_max)
+			{
+				out2 = 0;
+				sprintf(send_message, "out2 = 0\n");    //湿度 > 上限值  输出2开
+				sendstr(send_message);
+			}
+			
+			if(humi_min_flag == 1 && (int)RH < humi_min)
+			{
+				out2 = 1;
+				sprintf(send_message, "out2 = 1\n");    //湿度 < 下限值  输出2关
+				sendstr(send_message);
+			}
+			
+			if(light_min_flag == 1 && light_compare < light_min)
+			{
+				out3 = 0;
+				sprintf(send_message, "out3 = 0\n");    //光照 < 下限值  输出3开
+				sendstr(send_message);
+			}
+			
+			if(light_max_flag == 1 && light_compare > light_max)
+			{
+				out3 = 1;
+				sprintf(send_message, "out3 = 1\n");    //光照 > 上限值  输出3关
+				sendstr(send_message);
+			}
+			
+			if(card_flag_c == 1)
+			{
+				android_control_lcd1602();
+				card_flag_c = 0;
+			}
 			if(flag2 == 1)
 			{
-				sprintf(send_message, "card id = %s\n", cardid);
-				sendstr(send_message);
+				if(android_flag == 1)
+				{
+					android_control_lcd1602();
+					card_flag_c = 1;
+				}
 				if(steer_flag == 1 && card_flag == 1 && 
 					(strcmp(cardid, setcard_buf) == 0))
-				{
+				{		
 					while(lock_2 == 1);
 					lock_3 = 1;
 					
@@ -109,9 +149,15 @@ int main()
 					interrupt1_lock = 0;
 					interrupt3_lock = 0;
 					bpm = 0;
+					stop_interrupt();
 					
 					lock_3 = 0;
                 }
+				else
+				{
+					sprintf(send_message, "card id = %s\n", cardid);
+				    sendstr(send_message);
+				}
 				stop_interrupt();
 				Delay500ms();
 				Delay500ms();

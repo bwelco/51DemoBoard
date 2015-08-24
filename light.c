@@ -3,8 +3,10 @@
 BYTE    BUF[8];                         //接收数据缓存区      	
 uchar   ge,shi,bai,qian,wan;            //显示变量
 int     dis_data;            //变量
+char ledstr2[50];
 
 char ledstr[50];
+int light_compare = 0;
 //*********************************************************
 void conversion(uint temp_data)  //  数据转换出 个，十，百，千，万
 {  
@@ -215,7 +217,6 @@ void Init_BH1750()
 void getled()
 {
 	float temp;
-	int send_data = 0;
 	Init_BH1750(); 
     Single_Write_BH1750(0x01);      // power on
     Single_Write_BH1750(0x10);      // H- resolution mode
@@ -226,7 +227,8 @@ void getled()
     temp=(float)dis_data/1.2;
 
     conversion(temp);               //计算数据和显示
-	send_data = (wan-'0') * 10000 + (qian-'0') * 1000 + (bai-'0') * 100 + (shi-'0') * 10 + (ge-'0');
-	sprintf(ledstr, "light = %d\n",send_data);
-
+	light_compare = (wan-'0') * 10000 + (qian-'0') * 1000 + (bai-'0') * 100 + (shi-'0') * 10 + (ge-'0');
+	sprintf(ledstr, "light = %d\n",light_compare);
+    sprintf(ledstr2, "Light = %d", light_compare);
 }
+

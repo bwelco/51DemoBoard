@@ -86,7 +86,7 @@ void PCA_isr() interrupt 7
 		numcc = 0;
 		gettemperature();
 		getled();
-
+		normal_lcd1602_show();
 	}
 }
 

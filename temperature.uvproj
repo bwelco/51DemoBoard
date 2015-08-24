@@ -386,6 +386,11 @@
               <FileType>1</FileType>
               <FilePath>.\light.c</FilePath>
             </File>
+            <File>
+              <FileName>lcd1602.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\lcd1602.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
