@@ -1,4 +1,4 @@
-C51 COMPILER V9.52.0.0   LCD1602                                                           08/24/2015 23:09:53 PAGE 1   
+C51 COMPILER V9.52.0.0   LCD1602                                                           09/15/2015 14:57:01 PAGE 1   
 
 
 C51 COMPILER V9.52.0.0, COMPILATION OF MODULE LCD1602
@@ -13,7 +13,7 @@ line level    source
    4          {
    5   1              int a,b;
    6   1              for(a=z;a>0;a--)
-   7   1              for(b=110;b>0;b--);
+   7   1              for(b=30;b>0;b--);
    8   1      }
    9          
   10          void write_com_1602_morefree (unsigned char com)
@@ -48,76 +48,86 @@ line level    source
   39   1              write_com_1602_morefree(0x06);
   40   1              write_com_1602_morefree(0x01);
   41   1      }
-  42          
+  42          /*
   43          void android_control_lcd1602()
   44          {
-  45   1              int i = 0;
-  46   1              write_com_1602_morefree(0x80);
-  47   1          sprintf(tab1, "     Android     ");
-  48   1              sprintf(tab2, "   Controlling          ");
-  49   1              for(i=0;i<strlen("     Android     ");i++)
-  50   1              {
-  51   2                      write_date_1602_morefree(tab1[i]);
-  52   2                      lcd_delay(50);
-  53   2              }
-  54   1                      
-  55   1              write_com_1602_morefree(0x80+0x40);
-C51 COMPILER V9.52.0.0   LCD1602                                                           08/24/2015 23:09:53 PAGE 2   
+  45                  int i = 0;
+  46                  write_com_1602_morefree(0x80);
+  47              sprintf(tab1, "     Android     ");
+  48                  sprintf(tab2, "   Controlling          ");
+  49                  for(i=0;i<strlen("     Android     ");i++)
+  50                  {
+  51                          write_date_1602_morefree(tab1[i]);
+  52                          lcd_delay(5);
+  53                  }
+  54                          
+  55                  write_com_1602_morefree(0x80+0x40);
+C51 COMPILER V9.52.0.0   LCD1602                                                           09/15/2015 14:57:01 PAGE 2   
 
-  56   1              for(i=0;i<strlen("   Controlling          ");i++)
-  57   1              {
-  58   2                      write_date_1602_morefree(tab2[i]);
-  59   2                      lcd_delay(50);
-  60   2              }
-  61   1      }
-  62          
+  56                  for(i=0;i<strlen("   Controlling          ");i++)
+  57                  {
+  58                          write_date_1602_morefree(tab2[i]);
+  59                          lcd_delay(5);
+  60                  }
+  61          }
+  62          */
   63          void normal_lcd1602_show()
   64          {
   65   1              int i = 0;
   66   1              write_com_1602_morefree(0x80);
-  67   1          sprintf(tab1, "  T = %d R = %d       ", TH, RH);
-  68   1              sprintf(tab2, "   %s     ", ledstr2);
-  69   1              
-  70   1              for(i=0;i<strlen(tab1);i++)
-  71   1              {
-  72   2                      write_date_1602_morefree(tab1[i]);
-  73   2                      lcd_delay(50);
-  74   2              }
-  75   1                      
-  76   1              write_com_1602_morefree(0x80+0x40);
-  77   1              for(i=0;i<strlen(tab2);i++)
-  78   1              {
-  79   2                      write_date_1602_morefree(tab2[i]);
-  80   2                      lcd_delay(50);
-  81   2              }
-  82   1      }
-  83          
-  84          void welcome()
-  85          {
-  86   1              int i = 0;
-  87   1              write_com_1602_morefree(0x80);
-  88   1          sprintf(tab1, " NOC Innovation      ");
-  89   1              sprintf(tab2, "   Starting...          ");
-  90   1              for(i=0;i<strlen(tab1);i++)
-  91   1              {
-  92   2                      write_date_1602_morefree(tab1[i]);
-  93   2                      lcd_delay(50);
-  94   2              }
-  95   1                      
-  96   1              write_com_1602_morefree(0x80+0x40);
-  97   1              for(i=0;i<strlen(tab2);i++)
-  98   1              {
-  99   2                      write_date_1602_morefree(tab2[i]);
- 100   2                      lcd_delay(50);
- 101   2              }
- 102   1      }
+  67   1              if(TH > 70)
+  68   1              {
+  69   2                      sprintf(tab1, "  T:OFF  R:OFF       ", TH, RH);
+  70   2                      sprintf(tab2, "   %s     ", ledstr2);
+  71   2              }
+  72   1              else
+  73   1              {
+  74   2                      sprintf(tab1, "  T = %d R = %d       ", TH, RH);
+  75   2                      sprintf(tab2, "   %s     ", ledstr2);
+  76   2              }
+  77   1              
+  78   1              for(i=0;i<strlen(tab1);i++)
+  79   1              {
+  80   2                      write_date_1602_morefree(tab1[i]);
+  81   2                      lcd_delay(5);
+  82   2              }
+  83   1                      
+  84   1              write_com_1602_morefree(0x80+0x40);
+  85   1              for(i=0;i<strlen(tab2);i++)
+  86   1              {
+  87   2                      write_date_1602_morefree(tab2[i]);
+  88   2                      lcd_delay(5);
+  89   2              }
+  90   1      }
+  91          
+  92          void welcome()
+  93          {
+  94   1              int i = 0;
+  95   1              write_com_1602_morefree(0x80);
+  96   1          sprintf(tab1, "    Welcome      ");
+  97   1              sprintf(tab2, "   Starting...          ");
+  98   1              for(i=0;i<strlen(tab1);i++)
+  99   1              {
+ 100   2                      write_date_1602_morefree(tab1[i]);
+ 101   2                      lcd_delay(5);
+ 102   2              }
+ 103   1                      
+ 104   1              write_com_1602_morefree(0x80+0x40);
+ 105   1              for(i=0;i<strlen(tab2);i++)
+ 106   1              {
+ 107   2                      write_date_1602_morefree(tab2[i]);
+ 108   2                      lcd_delay(5);
+ 109   2              }
+ 110   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    701    ----
-   CONSTANT SIZE    =    124    ----
-   XDATA SIZE       =   ----       6
+   CODE SIZE        =    540    ----
+   CONSTANT SIZE    =     99    ----
+   XDATA SIZE       =   ----       4
    PDATA SIZE       =   ----    ----
+C51 COMPILER V9.52.0.0   LCD1602                                                           09/15/2015 14:57:01 PAGE 3   
+
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----

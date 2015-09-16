@@ -32,7 +32,7 @@ void system_init(void)
 	IP2 = 0X00;
 	IPH2 = 0X00;
 	//PSPI = 0;
-	
+	//turn_90();
 	init_1602_morefree();
 	write_com_1602_morefree(0x80);
 	welcome();

@@ -28,11 +28,13 @@ extern void handle_message();
 extern int temp_lock;
 extern void stop_interrupt();
 extern void start_interrupt();
-extern char cardid[50];
+extern char cardid[20];
+extern char cardid_temp[20];
 
 extern int posi;
 extern int temp_lock;
 extern int card_id_posi;
+extern int delay_flag;
 
 extern int temp_max;
 extern int temp_min;
@@ -53,12 +55,13 @@ extern int redlight_flag;
 extern int sound_flag;
 extern int steer_flag;
 extern int card_flag;
-extern char setcard_buf[50];
+extern char setcard_buf[20];
 extern int steer_degree;
 
 
-extern char tab1[30];
-extern char tab2[30];
+extern char tab1[20];
+extern char tab2[20];
+extern char led_set[4];
 
 extern unsigned short T_PCA0;     
 extern unsigned short T_PCA1;
@@ -70,7 +73,7 @@ extern int lock_2;
 extern int lock_3;
 
 extern void sendstr(char *str);
-extern char send_message[50];
+extern char send_message[30];
 /*******************temperature************/
 
 #define uchar unsigned char
@@ -104,6 +107,7 @@ extern void delay_ms_steering(unsigned int x);
 extern unsigned int turn(int degree);
 extern void InitSteering(void);
 extern void StopSteering(void);
+//extern void turn_90();
 
 extern int interrupt1_lock;
 extern int interrupt3_lock;
@@ -131,9 +135,10 @@ sbit      red =  P2^1;
 sbit      green = P2^0;
 sbit      blue = P2^3;
 
-sbit      lcden=P2^6;
-sbit      lcdrw=P1^1;
-sbit      lcdrs=P1^0;
+sbit      lcden = P2^6;
+sbit      lcdrw = P1^1;
+sbit      lcdrs = P1^0;
+sbit      mykey = P3^7;
 
 
 
@@ -171,7 +176,7 @@ extern void lcd_delay(int z);
 extern void write_com_1602_morefree (unsigned char com);
 extern void write_date_1602_morefree (unsigned char date);
 extern void init_1602_morefree();
-extern void android_control_lcd1602();
+// void android_control_lcd1602();
 extern void normal_lcd1602_show();
 extern void welcome();
 extern int android_flag;

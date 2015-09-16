@@ -19,4 +19,22 @@ unsigned int turn(int degree)
 	temp = (unsigned int)temp2;
 	return temp;
 }
-
+/*
+void turn_90()
+{
+    stop_interrupt();
+	pwm_value = turn(90);
+	InitSteering();
+	interrupt1_lock = 1;
+	interrupt3_lock = 1;
+		
+	delay_ms_steering(1000);
+	delay_ms_steering(1000);
+	delay_ms_steering(500);
+	StopSteering();
+	start_interrupt();
+	sendstr("OK\n");
+	interrupt1_lock = 0;
+	interrupt3_lock = 0;
+}
+*/

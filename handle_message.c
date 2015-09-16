@@ -1,5 +1,5 @@
 #include <myhead.h>
-char send_message[50];
+char send_message[30];
 int tempdegree;
 char *p;
 int android_flag = 0;
@@ -7,6 +7,7 @@ void handle_message()
 {
     if(strncmp(strbuf, "test", 4) == 0)
 	{
+		android_flag = 0;
 		CR = 0;  
 		sprintf(send_message, "return test\n");
 		sendstr(send_message);
@@ -26,6 +27,7 @@ void handle_message()
 			i = 0;
 		sprintf(send_message, "out1 = %d\n", i);
 		sendstr(send_message);
+		normal_lcd1602_show();
 	}
 	if(strncmp(strbuf, "GETHUNIDITY", strlen("GETTEMPERATURE")) == 0)
 	{
@@ -40,6 +42,7 @@ void handle_message()
 			i = 0;
 		sprintf(send_message, "out2 = %d\n", i);
 		sendstr(send_message);
+		normal_lcd1602_show();
 	}
 	if(strncmp(strbuf, "GETLIGHT", strlen("GETLIGHT")) == 0)
 	{
@@ -52,6 +55,7 @@ void handle_message()
 			i = 0;
 		sprintf(send_message, "out3 = %d\n",i);
 		sendstr(send_message);
+		normal_lcd1602_show();
 	}
 	if(strncmp(strbuf, "SETSTEER", strlen("SETSTEER")) == 0)
 	{
@@ -81,7 +85,8 @@ void handle_message()
 		sendstr("OK\n");
 		interrupt1_lock = 0;
 		interrupt3_lock = 0;
-		android_control_lcd1602();
+		//android_control_lcd1602();
+		normal_lcd1602_show();
 		
 		//lock_3 = 0;
     }
@@ -208,6 +213,12 @@ void handle_message()
 		red = strbuf[6] - '0';
 		green = strbuf[7]- '0';
 		blue = strbuf[8] - '0';		
+		
+		delay_ms_steering(1000);
+		delay_ms_steering(1000);
+		delay_ms_steering(500);
+		
+		red = green = blue = 1;
     }
 	
 	if(strncmp(strbuf, "BPMON", strlen("BPMON")) == 0)
@@ -455,7 +466,7 @@ void handle_message()
 		int rcc,gcc,bcc;
 		int bpmcc;
 		android_flag = 1;
-        android_control_lcd1602();
+      //  android_control_lcd1602();
 		CR = 0;  
 		gettemperature();
 		sprintf(send_message, "T = %d.%d\n", TH, TL);
@@ -536,4 +547,11 @@ void handle_message()
 		android_flag = 0;
 		normal_lcd1602_show();
     }
+	if(strncmp(strbuf, "SETMYLED", strlen("SETMYLED")) == 0)
+	{
+		p = strbuf + 8;
+		led_set[0] = *p;
+		led_set[1] = *(p + 1);
+		led_set[2] = *(p + 2);
+	}
 }

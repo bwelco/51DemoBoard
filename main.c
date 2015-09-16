@@ -8,10 +8,11 @@ char strbuf[50] = {0};
 int posi = 0;
 int temp_lock = 0;
 int card_id_posi = 0;
-char cardid[50] = {0};
+char cardid[20] = {0};
+char cardid_temp[20];
 
-char tab1[30];
-char tab2[30];
+char tab1[20];
+char tab2[20];
 
 int temp_max = 100;
 int temp_min = -40;
@@ -34,18 +35,19 @@ int sound_flag = 0;
 
 int steer_flag = 0;
 int card_flag = 0;
-char setcard_buf[50];
+char led_set[4];
+char setcard_buf[20];
 int steer_degree = 0;
 
 int lock_2 = 0;
 int lock_3 = 0;
 int card_flag_c = 0;
+int delay_flag = 0;
+int testflag = 0;
 int main()
 {	
 	bpm = 0;
-
-    system_init();
-	
+    system_init();	
 	sendstr("Programme starting...\n");
 	
 	while(1)
@@ -59,17 +61,85 @@ int main()
 				else
 					bpm = 0;
 			}
-			
+			if(mykey == 0)
+			{
+				//sound_delay();
+				if(mykey == 0)
+				{
+					while(lock_2 == 1);
+					lock_3 = 1;
+					
+					bpm = 1;
+					stop_interrupt();
+					pwm_value = turn(90);
+					InitSteering();
+					interrupt1_lock = 1;
+					interrupt3_lock = 1;
+					
+					delay_ms_steering(1000);
+					delay_ms_steering(1000);
+					delay_ms_steering(500);
+					StopSteering();
+					start_interrupt();
+					sendstr("OK\n");
+					interrupt1_lock = 0;
+					interrupt3_lock = 0;
+					bpm = 0;
+					
+					lock_3 = 0;
+				}
+			}
 			if(sound_key == 0 && sound_flag == 1)
 			{
 				//sound_delay();
 				if(sound_key == 0)
 				{
-					out1 = 0;
-					sprintf(send_message, "out1 = 0\n");
-					sendstr(send_message);
-					sound_key = 1;
+				//	out1 = 0;
+				//	sprintf(send_message, "out1 = 0\n");
+				//	sendstr(send_message);
+				//	sound_key = 1;
+					
+					if(testflag == 0)
+					{
+						out1 = 0;
+					    sprintf(send_message, "out1 = 0\n");
+					    sendstr(send_message);
+					    sound_key = 1;
+						testflag = 1;
+						continue;
+					}
+					if(testflag == 1)
+					{
+						out1 = 1;
+					    sprintf(send_message, "out1 = 1\n");
+					    sendstr(send_message);
+					    sound_key = 1;
+						testflag = 0;
+						continue;
+					}
+					/*if(testflag == 0)
+					{
+						red = led_set[0] - '0';
+						green = led_set[1]- '0';
+						blue = led_set[2] - '0';	
+						testflag = 1;
+						delay_ms_steering(1000);
+					//	delay_ms_steering(1000);
+						delay_ms_steering(500);
+					}
+					
+					if(testflag == 1)
+					{
+						red = 1;
+						green = 1;
+						blue = 1;	
+						testflag = 0;
+						delay_ms_steering(1000);
+						//delay_ms_steering(1000);
+						delay_ms_steering(500);
+					}*/
 				}
+				
             }
 			
 			if(temp_min_flag == 1 && temp_min > (int)TH)
@@ -90,14 +160,14 @@ int main()
 			if(humi_max_flag == 1 && (int)RH > humi_max)
 			{
 				out2 = 0;
-				sprintf(send_message, "out2 = 0\n");    //湿度 > 上限值  输出2开
+				sprintf(send_message, "out2 = 1\n");    //湿度 > 上限值  输出2关
 				sendstr(send_message);
 			}
 			
 			if(humi_min_flag == 1 && (int)RH < humi_min)
 			{
 				out2 = 1;
-				sprintf(send_message, "out2 = 1\n");    //湿度 < 下限值  输出2关
+				sprintf(send_message, "out2 = 0\n");    //湿度 < 下限值  输出2开
 				sendstr(send_message);
 			}
 			
@@ -106,6 +176,10 @@ int main()
 				out3 = 0;
 				sprintf(send_message, "out3 = 0\n");    //光照 < 下限值  输出3开
 				sendstr(send_message);
+				
+				red = led_set[0] - '0';
+		        green = led_set[1]- '0';
+		        blue = led_set[2] - '0';		
 			}
 			
 			if(light_max_flag == 1 && light_compare > light_max)
@@ -113,23 +187,50 @@ int main()
 				out3 = 1;
 				sprintf(send_message, "out3 = 1\n");    //光照 > 上限值  输出3关
 				sendstr(send_message);
+				
+				red = 1;
+		        green = 1;
+		        blue = 1;	
 			}
 			
-			if(card_flag_c == 1)
+			//if(card_flag_c == 1)
+			//{
+			//	//android_control_lcd1602();
+			//	card_flag_c = 0;
+			//}
+			
+			//if(android_flag == 0)
+			//{
+			//	normal_lcd1602_show();
+			//}
+			/*
+			if(delay_flag == 1 && flag2 == 0)
 			{
-				android_control_lcd1602();
-				card_flag_c = 0;
+				CR = 0;
+				IE2  =  IE2 | 0X00;
+				normal_lcd1602_show();
+				delay_ms_steering(1000);
+				delay_ms_steering(1000);
+				delay_ms_steering(500);
+				delay_flag = 0;
+				IE2  =  IE2 | 0X01;
+				PCA_init();
 			}
+			*/
 			if(flag2 == 1)
 			{
 				if(android_flag == 1)
 				{
-					android_control_lcd1602();
-					card_flag_c = 1;
+					sprintf(send_message, "card id = %s\n", cardid);
+					sendstr(send_message);
+				}
+				if(strcmp(cardid, setcard_buf) != 0)
+				{
+					continue;
 				}
 				if(steer_flag == 1 && card_flag == 1 && 
 					(strcmp(cardid, setcard_buf) == 0))
-				{		
+				{
 					while(lock_2 == 1);
 					lock_3 = 1;
 					
@@ -149,18 +250,13 @@ int main()
 					interrupt1_lock = 0;
 					interrupt3_lock = 0;
 					bpm = 0;
-					stop_interrupt();
 					
 					lock_3 = 0;
+					
                 }
-				else
-				{
-					sprintf(send_message, "card id = %s\n", cardid);
-				    sendstr(send_message);
-				}
 				stop_interrupt();
-				Delay500ms();
-				Delay500ms();
+			//	Delay500ms();
+				//Delay500ms();
 				
 				while(S2CON&S2RI)
 				{
@@ -184,80 +280,3 @@ void sound_delay(unsigned int z)
     for(i=z;i>0;i--)
         for(j=110;j>0;j--);
 } 
-
-
-
-/************串口1中断处理函数*********
-void Uart() interrupt 4 using 1
-{
-    unsigned char recv_data;
-	if(RI == 1)
-	{
-	    recv_data = SBUF;
-		RI = 0;
-	
-		if(recv_data != '*')
-		{
-			strbuf[posi++] = recv_data;	
-		}
-		else
-		{
-			temp_lock = 0;
-			strbuf[posi] = '\0';
-		    recv_lock = 1;
-			posi = 0;
-			//while(temp_lock == 0);
-			//handle_message();
-		}
-	}
-
-}
-/*********** 串口2中断处理函数 *****
-void UART_2Interrupt(void) interrupt 8
-{
-	unsigned char recv_data;
-	unsigned char a;
-	
-    if(S2CON&S2RI)
-	{
-		bmp = 1;
-		recv_data = S2BUF;
-		S2CON&=~S2RI;
-	
-		if(recv_data != 0x03)
-		{
-			cardid[card_id_posi++] = recv_data;	
-		}
-		else
-		{
-			cardid[card_id_posi++] = '\0';
-			card_id_posi = 0;	
-			flag2 = 1;
-		}
-	} 
-}
-
-void UART_2Interrupt(void) interrupt 8
-{
-	if(S2CON&S2RI)
-	{
-		S2CON&=~S2RI;
-		temp2=S2BUF;
-		if(temp2 == 0x02)
-		{
-			card_id_posi = 0;
-			
-        }
-		if(temp2 != 0x02 && temp2 != 0x03)
-		{
-			cardid[card_id_posi++] = temp2;
-		}
-		if(temp2 == 0x03)
-		{
-			flag2 = 1;
-			cardid[card_id_posi - 2] = '\0';
-		}
-	} 
-}
-
-*/
