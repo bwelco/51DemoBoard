@@ -90,56 +90,29 @@ int main()
 				}
 			}
 			if(sound_key == 0 && sound_flag == 1)
-			{
-				//sound_delay();
-				if(sound_key == 0)
-				{
-				//	out1 = 0;
-				//	sprintf(send_message, "out1 = 0\n");
-				//	sendstr(send_message);
-				//	sound_key = 1;
-					
+			{					
 					if(testflag == 0)
 					{
-						out1 = 0;
-					    sprintf(send_message, "out1 = 0\n");
+						out3 = 0;
+					    sprintf(send_message, "out3 = 0\n");
 					    sendstr(send_message);
-					    sound_key = 1;
 						testflag = 1;
-						continue;
-					}
-					if(testflag == 1)
-					{
-						out1 = 1;
-					    sprintf(send_message, "out1 = 1\n");
-					    sendstr(send_message);
-					    sound_key = 1;
-						testflag = 0;
-						continue;
-					}
-					/*if(testflag == 0)
-					{
-						red = led_set[0] - '0';
-						green = led_set[1]- '0';
-						blue = led_set[2] - '0';	
-						testflag = 1;
+
 						delay_ms_steering(1000);
-					//	delay_ms_steering(1000);
+						delay_ms_steering(1000);
 						delay_ms_steering(500);
 					}
-					
-					if(testflag == 1)
+					else if(testflag == 1)
 					{
-						red = 1;
-						green = 1;
-						blue = 1;	
+						out3 = 1;
+					    sprintf(send_message, "out3 = 1\n");
+					    sendstr(send_message);
 						testflag = 0;
+
 						delay_ms_steering(1000);
-						//delay_ms_steering(1000);
+						delay_ms_steering(1000);
 						delay_ms_steering(500);
-					}*/
-				}
-				
+					}				
             }
 			
 			if(temp_min_flag == 1 && temp_min > (int)TH)
@@ -193,30 +166,6 @@ int main()
 		        blue = 1;	
 			}
 			
-			//if(card_flag_c == 1)
-			//{
-			//	//android_control_lcd1602();
-			//	card_flag_c = 0;
-			//}
-			
-			//if(android_flag == 0)
-			//{
-			//	normal_lcd1602_show();
-			//}
-			/*
-			if(delay_flag == 1 && flag2 == 0)
-			{
-				CR = 0;
-				IE2  =  IE2 | 0X00;
-				normal_lcd1602_show();
-				delay_ms_steering(1000);
-				delay_ms_steering(1000);
-				delay_ms_steering(500);
-				delay_flag = 0;
-				IE2  =  IE2 | 0X01;
-				PCA_init();
-			}
-			*/
 			if(flag2 == 1)
 			{
 				if(android_flag == 1)

@@ -426,7 +426,12 @@ void handle_message()
 		if(*p == '1')
 			sound_flag = 1;
 		if(*p == '0')
+		{
 			sound_flag = 0;
+			out3 = 0;
+			sprintf(send_message, "out3 = 0\n");
+			sendstr(send_message);
+		}
     }
 	
 	if(strncmp(strbuf, "LIGHTFLAG", strlen("LIGHTFLAG")) == 0)
@@ -435,7 +440,10 @@ void handle_message()
 		if(*p == '1')
 			redlight_flag = 1;
 		if(*p == '0')
+		{
 			redlight_flag = 0;
+			bpm = 0;
+		}
     }
 	
 	if(strncmp(strbuf, "GETREDLIGHT", strlen("GETREDLIGHT")) == 0)

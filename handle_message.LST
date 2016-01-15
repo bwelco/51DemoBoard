@@ -1,7 +1,7 @@
-C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    09/15/2015 14:57:01 PAGE 1   
+C51 COMPILER V9.00   HANDLE_MESSAGE                                                        01/16/2016 00:00:22 PAGE 1   
 
 
-C51 COMPILER V9.52.0.0, COMPILATION OF MODULE HANDLE_MESSAGE
+C51 COMPILER V9.00, COMPILATION OF MODULE HANDLE_MESSAGE
 OBJECT MODULE PLACED IN handle_message.OBJ
 COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE handle_message.c LARGE BROWSE DEBUG OBJECTEXTEND
 
@@ -62,7 +62,7 @@ line level    source
   53   2                              i = 1;
   54   2                      else 
   55   2                              i = 0;
-C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    09/15/2015 14:57:01 PAGE 2   
+C51 COMPILER V9.00   HANDLE_MESSAGE                                                        01/16/2016 00:00:22 PAGE 2   
 
   56   2                      sprintf(send_message, "out3 = %d\n",i);
   57   2                      sendstr(send_message);
@@ -126,7 +126,7 @@ line level    source
  115   1                      while(*p != '\0')
  116   1                      {
  117   1                              tempdegree = tempdegree * 10 + (*p - '0');
-C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    09/15/2015 14:57:01 PAGE 3   
+C51 COMPILER V9.00   HANDLE_MESSAGE                                                        01/16/2016 00:00:22 PAGE 3   
 
  118   1                              p++;
  119   1              }
@@ -190,7 +190,7 @@ line level    source
  177   1              }
  178   1                      light_min = tempdegree;
  179   1          }
-C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    09/15/2015 14:57:01 PAGE 4   
+C51 COMPILER V9.00   HANDLE_MESSAGE                                                        01/16/2016 00:00:22 PAGE 4   
 
  180   1              */
  181   1              if(strncmp(strbuf, "OUT1ON", strlen("OUT1ON")) == 0)
@@ -254,7 +254,7 @@ line level    source
  239   2                      if(*p == 'T')
  240   2                      {
  241   3                              temp_max = 0;
-C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    09/15/2015 14:57:01 PAGE 5   
+C51 COMPILER V9.00   HANDLE_MESSAGE                                                        01/16/2016 00:00:22 PAGE 5   
 
  242   3                              p = p + 4;
  243   3                              if(*p == '\0')
@@ -318,7 +318,7 @@ line level    source
  301   2                      if(*p == 'T')
  302   2                      {
  303   3                              temp_min = 0;
-C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    09/15/2015 14:57:01 PAGE 6   
+C51 COMPILER V9.00   HANDLE_MESSAGE                                                        01/16/2016 00:00:22 PAGE 6   
 
  304   3                              p = p + 4;
  305   3                              if(*p == '\0')
@@ -382,7 +382,7 @@ line level    source
  363   1              {
  364   2                      char *q = setcard_buf;
  365   2                      p = strbuf;
-C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    09/15/2015 14:57:01 PAGE 7   
+C51 COMPILER V9.00   HANDLE_MESSAGE                                                        01/16/2016 00:00:22 PAGE 7   
 
  366   2                      p = p + 7;
  367   2                      while(*p != '\0')
@@ -446,147 +446,155 @@ line level    source
  425   2                      p = strbuf + 9;
  426   2                      if(*p == '1')
  427   2                              sound_flag = 1;
-C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    09/15/2015 14:57:01 PAGE 8   
+C51 COMPILER V9.00   HANDLE_MESSAGE                                                        01/16/2016 00:00:22 PAGE 8   
 
  428   2                      if(*p == '0')
- 429   2                              sound_flag = 0;
- 430   2          }
- 431   1              
- 432   1              if(strncmp(strbuf, "LIGHTFLAG", strlen("LIGHTFLAG")) == 0)
- 433   1              {
- 434   2                      p = strbuf + 9;
- 435   2                      if(*p == '1')
- 436   2                              redlight_flag = 1;
- 437   2                      if(*p == '0')
- 438   2                              redlight_flag = 0;
- 439   2          }
- 440   1              
- 441   1              if(strncmp(strbuf, "GETREDLIGHT", strlen("GETREDLIGHT")) == 0)
- 442   1              {
- 443   2                      int i = 0;
- 444   2                      if(redlight_flag == 1)
- 445   2                              i = 1;
- 446   2                      else 
- 447   2                              i = 0;
- 448   2                      sprintf(send_message, "redlight = %d\n",i);
- 449   2                      sendstr(send_message);
- 450   2          }
- 451   1              
- 452   1              if(strncmp(strbuf, "GETSOUNDFLAG", strlen("GETSOUNDFLAG")) == 0)
- 453   1              {
- 454   2                      int i = 0;
- 455   2                      if(sound_flag == 1)
- 456   2                              i = 1;
- 457   2                      else 
- 458   2                              i = 0;
- 459   2                      sprintf(send_message, "sound = %d\n",i);
- 460   2                      sendstr(send_message);
- 461   2          }
- 462   1              
- 463   1              if(strncmp(strbuf, "GETALLFLAGINIT", strlen("GETALLFLAGINIT")) == 0)
- 464   1              {
- 465   2                  int i = 0;
- 466   2                      int rcc,gcc,bcc;
- 467   2                      int bpmcc;
- 468   2                      android_flag = 1;
- 469   2            //  android_control_lcd1602();
- 470   2                      CR = 0;  
- 471   2                      gettemperature();
- 472   2                      sprintf(send_message, "T = %d.%d\n", TH, TL);
- 473   2                      sendstr(send_message);
- 474   2                      Delay18ms();
- 475   2                      sprintf(send_message, "R = %d.%d\n", RH, RL);
- 476   2                      sendstr(send_message);
- 477   2                      Delay18ms();
- 478   2                      getled();
- 479   2                      sendstr(ledstr);
- 480   2                      Delay18ms();
- 481   2                      /***********out1***********/
- 482   2                      if(out1 == 1)
- 483   2                              i = 1;
- 484   2                      else 
- 485   2                              i = 0;
- 486   2                      sprintf(send_message, "out1 = %d\n", i);
- 487   2                      sendstr(send_message);
+ 429   2                      {
+ 430   3                              sound_flag = 0;
+ 431   3                              out3 = 0;
+ 432   3                              sprintf(send_message, "out3 = 0\n");
+ 433   3                              sendstr(send_message);
+ 434   3                      }
+ 435   2          }
+ 436   1              
+ 437   1              if(strncmp(strbuf, "LIGHTFLAG", strlen("LIGHTFLAG")) == 0)
+ 438   1              {
+ 439   2                      p = strbuf + 9;
+ 440   2                      if(*p == '1')
+ 441   2                              redlight_flag = 1;
+ 442   2                      if(*p == '0')
+ 443   2                      {
+ 444   3                              redlight_flag = 0;
+ 445   3                              bpm = 0;
+ 446   3                      }
+ 447   2          }
+ 448   1              
+ 449   1              if(strncmp(strbuf, "GETREDLIGHT", strlen("GETREDLIGHT")) == 0)
+ 450   1              {
+ 451   2                      int i = 0;
+ 452   2                      if(redlight_flag == 1)
+ 453   2                              i = 1;
+ 454   2                      else 
+ 455   2                              i = 0;
+ 456   2                      sprintf(send_message, "redlight = %d\n",i);
+ 457   2                      sendstr(send_message);
+ 458   2          }
+ 459   1              
+ 460   1              if(strncmp(strbuf, "GETSOUNDFLAG", strlen("GETSOUNDFLAG")) == 0)
+ 461   1              {
+ 462   2                      int i = 0;
+ 463   2                      if(sound_flag == 1)
+ 464   2                              i = 1;
+ 465   2                      else 
+ 466   2                              i = 0;
+ 467   2                      sprintf(send_message, "sound = %d\n",i);
+ 468   2                      sendstr(send_message);
+ 469   2          }
+ 470   1              
+ 471   1              if(strncmp(strbuf, "GETALLFLAGINIT", strlen("GETALLFLAGINIT")) == 0)
+ 472   1              {
+ 473   2                  int i = 0;
+ 474   2                      int rcc,gcc,bcc;
+ 475   2                      int bpmcc;
+ 476   2                      android_flag = 1;
+ 477   2            //  android_control_lcd1602();
+ 478   2                      CR = 0;  
+ 479   2                      gettemperature();
+ 480   2                      sprintf(send_message, "T = %d.%d\n", TH, TL);
+ 481   2                      sendstr(send_message);
+ 482   2                      Delay18ms();
+ 483   2                      sprintf(send_message, "R = %d.%d\n", RH, RL);
+ 484   2                      sendstr(send_message);
+ 485   2                      Delay18ms();
+ 486   2                      getled();
+ 487   2                      sendstr(ledstr);
  488   2                      Delay18ms();
- 489   2                      /***********out2***********/
-C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    09/15/2015 14:57:01 PAGE 9   
+ 489   2                      /***********out1***********/
+C51 COMPILER V9.00   HANDLE_MESSAGE                                                        01/16/2016 00:00:22 PAGE 9   
 
- 490   2                      if(out2 == 1)
+ 490   2                      if(out1 == 1)
  491   2                              i = 1;
  492   2                      else 
  493   2                              i = 0;
- 494   2                      sprintf(send_message, "out2 = %d\n", i);
+ 494   2                      sprintf(send_message, "out1 = %d\n", i);
  495   2                      sendstr(send_message);
  496   2                      Delay18ms();
- 497   2                      /***********out3***********/
- 498   2                      if(out3 == 1)
+ 497   2                      /***********out2***********/
+ 498   2                      if(out2 == 1)
  499   2                              i = 1;
  500   2                      else 
  501   2                              i = 0;
- 502   2                      sprintf(send_message, "out3 = %d\n",i);
+ 502   2                      sprintf(send_message, "out2 = %d\n", i);
  503   2                      sendstr(send_message);
  504   2                      Delay18ms();
- 505   2                      /*********led******************/
- 506   2                      
- 507   2                      if(red == 0) rcc = 0; else rcc = 1;
- 508   2                      if(green == 0) gcc = 0; else gcc = 1;
- 509   2                      if(blue == 0) bcc = 0; else bcc = 1;
- 510   2                      sprintf(send_message, "RGB = %d%d%d\n", rcc, gcc ,bcc);
+ 505   2                      /***********out3***********/
+ 506   2                      if(out3 == 1)
+ 507   2                              i = 1;
+ 508   2                      else 
+ 509   2                              i = 0;
+ 510   2                      sprintf(send_message, "out3 = %d\n",i);
  511   2                      sendstr(send_message);
  512   2                      Delay18ms();
- 513   2                      /**************bpm****************/
- 514   2                      if(bpm == 1)
- 515   2                              bpmcc = 1;
- 516   2                      else 
- 517   2                              bpmcc = 0;
- 518   2                      sprintf(send_message, "bpm = %d\n", bpmcc);
+ 513   2                      /*********led******************/
+ 514   2                      
+ 515   2                      if(red == 0) rcc = 0; else rcc = 1;
+ 516   2                      if(green == 0) gcc = 0; else gcc = 1;
+ 517   2                      if(blue == 0) bcc = 0; else bcc = 1;
+ 518   2                      sprintf(send_message, "RGB = %d%d%d\n", rcc, gcc ,bcc);
  519   2                      sendstr(send_message);
  520   2                      Delay18ms();
- 521   2                      /**********************soundflag*************/
- 522   2                      if(sound_flag == 1)
- 523   2                              i = 1;
+ 521   2                      /**************bpm****************/
+ 522   2                      if(bpm == 1)
+ 523   2                              bpmcc = 1;
  524   2                      else 
- 525   2                              i = 0;
- 526   2                      sprintf(send_message, "sound = %d\n",i);
+ 525   2                              bpmcc = 0;
+ 526   2                      sprintf(send_message, "bpm = %d\n", bpmcc);
  527   2                      sendstr(send_message);
- 528   2                      /*******************redlight**************/
- 529   2                      if(redlight_flag == 1)
- 530   2                              i = 1;
- 531   2                      else 
- 532   2                              i = 0;
- 533   2                      sprintf(send_message, "redlight = %d\n",i);
- 534   2                      sendstr(send_message);
- 535   2                      Delay18ms();
- 536   2                      sprintf(send_message, "REFRESHOK\n");
- 537   2                      sendstr(send_message);
- 538   2      
- 539   2          }
- 540   1              if(strncmp(strbuf, "EXIT", strlen("EXIT")) == 0)
- 541   1              {
- 542   2                  sendstr("EXITOK\n");
- 543   2                      PCA_init();
- 544   2                      bpm = 1;
- 545   2                      Delay500ms();
- 546   2                      bpm = 0;
- 547   2                      android_flag = 0;
- 548   2                      normal_lcd1602_show();
- 549   2          }
- 550   1              if(strncmp(strbuf, "SETMYLED", strlen("SETMYLED")) == 0)
- 551   1              {
-C51 COMPILER V9.52.0.0   HANDLE_MESSAGE                                                    09/15/2015 14:57:01 PAGE 10  
+ 528   2                      Delay18ms();
+ 529   2                      /**********************soundflag*************/
+ 530   2                      if(sound_flag == 1)
+ 531   2                              i = 1;
+ 532   2                      else 
+ 533   2                              i = 0;
+ 534   2                      sprintf(send_message, "sound = %d\n",i);
+ 535   2                      sendstr(send_message);
+ 536   2                      /*******************redlight**************/
+ 537   2                      if(redlight_flag == 1)
+ 538   2                              i = 1;
+ 539   2                      else 
+ 540   2                              i = 0;
+ 541   2                      sprintf(send_message, "redlight = %d\n",i);
+ 542   2                      sendstr(send_message);
+ 543   2                      Delay18ms();
+ 544   2                      sprintf(send_message, "REFRESHOK\n");
+ 545   2                      sendstr(send_message);
+ 546   2      
+ 547   2          }
+ 548   1              if(strncmp(strbuf, "EXIT", strlen("EXIT")) == 0)
+ 549   1              {
+ 550   2                  sendstr("EXITOK\n");
+ 551   2                      PCA_init();
+C51 COMPILER V9.00   HANDLE_MESSAGE                                                        01/16/2016 00:00:22 PAGE 10  
 
- 552   2                      p = strbuf + 8;
- 553   2                      led_set[0] = *p;
- 554   2                      led_set[1] = *(p + 1);
- 555   2                      led_set[2] = *(p + 2);
- 556   2              }
- 557   1      }
+ 552   2                      bpm = 1;
+ 553   2                      Delay500ms();
+ 554   2                      bpm = 0;
+ 555   2                      android_flag = 0;
+ 556   2                      normal_lcd1602_show();
+ 557   2          }
+ 558   1              if(strncmp(strbuf, "SETMYLED", strlen("SETMYLED")) == 0)
+ 559   1              {
+ 560   2                      p = strbuf + 8;
+ 561   2                      led_set[0] = *p;
+ 562   2                      led_set[1] = *(p + 1);
+ 563   2                      led_set[2] = *(p + 2);
+ 564   2              }
+ 565   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   4412    ----
-   CONSTANT SIZE    =    417    ----
+   CODE SIZE        =   4448    ----
+   CONSTANT SIZE    =    427    ----
    XDATA SIZE       =     37      10
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
