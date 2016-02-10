@@ -89,5 +89,3 @@ void PCA_isr() interrupt 7
 		normal_lcd1602_show();
 	}
 }
-
-
